@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="zh-HK">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="宇多田光歌曲版本分組 Showroom：瀏覽目前暫定分組，逐組討論哪些版本應該合併或拆開。"
+    />
+    <meta name="theme-color" content="#100d18" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Hikaru Utada Song Version Showroom" />
+    <meta
+      property="og:description"
+      content="呢度唔係排名，而係俾 fans 一齊傾歌曲版本應該點分組。"
+    />
+    <meta name="twitter:card" content="summary" />
+    <title>Hikaru Utada Song Version Showroom</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#showroom">跳到歌曲分組</a>
+
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <header class="site-header shell">
+      <a class="brand" href="#top" aria-label="返回頁首">
+        <span class="brand-mark" aria-hidden="true">H</span>
+        <span class="brand-copy">
+          <strong>HIKARU UTADA</strong>
+          <small>VERSION GROUPING LAB</small>
+        </span>
+      </a>
+      <span class="draft-pill">FAN DISCUSSION DRAFT</span>
+    </header>
+
+    <main id="top">
+      <section class="hero shell" aria-labelledby="page-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span></span> SONG VERSION SHOWROOM</p>
+          <h1 id="page-title">歌曲版本・<em>分組 Showroom</em></h1>
+          <p class="hero-lede">
+            呢度唔係排名，亦唔係最終答案。每張卡代表一個<strong>目前暫定組別</strong>，
+            方便大家逐組傾：呢啲版本應該繼續放埋一齊，定係拆開獨立入榜？
+          </p>
+          <div class="hero-notes" aria-label="Showroom 使用提示">
+            <span><i aria-hidden="true">01</i> 同一卡 = 目前同組</span>
+            <span><i aria-hidden="true">02</i> 唔代表聽感相同</span>
+            <span><i aria-hidden="true">03</i> 傾好後先改正式 quiz pool</span>
+          </div>
+        </div>
+
+        <aside class="hero-panel" aria-label="歌曲分組統計">
+          <div class="hero-panel-topline">
+            <span>POOL SNAPSHOT</span>
+            <span id="as-of">LOADING</span>
+          </div>
+          <div class="primary-stat">
+            <strong id="group-total">—</strong>
+            <span>歌曲組</span>
+          </div>
+          <div class="secondary-stats">
+            <div>
+              <strong id="version-total">—</strong>
+              <span>收錄名稱</span>
+            </div>
+            <div>
+              <strong id="multi-total">—</strong>
+              <span>多版本組</span>
+            </div>
+            <div>
+              <strong id="single-total">—</strong>
+              <span>單版本組</span>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="rule-strip" aria-label="目前分組原則">
+        <div class="shell rule-strip-inner">
+          <span class="rule-label">目前原則</span>
+          <p>
+            由 main raw list 出發，先將同名版本自動放埋一組；暫時不設歌曲專屬例外，
+            remix、demo、live、interlude 都保留俾大家 review。
+          </p>
+        </div>
+      </section>
+
+      <section class="showroom shell" id="showroom" aria-labelledby="showroom-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow"><span></span> BROWSE THE CURRENT POOL</p>
+            <h2 id="showroom-title">逐組睇，逐組傾</h2>
+          </div>
+          <p>搜尋任何歌名、mix 或 version；每組都可以直接複製一段討論文字。</p>
+        </div>
+
+        <div class="toolbar" aria-label="歌曲分組搜尋及篩選">
+          <div class="search-wrap">
+            <label for="search-input">搜尋歌曲或版本</label>
+            <div class="search-box">
+              <span class="search-icon" aria-hidden="true"></span>
+              <input
+                id="search-input"
+                type="search"
+                autocomplete="off"
+                placeholder="例如 Beautiful World、Mix、Demo…"
+              />
+              <button id="clear-search" class="clear-search" type="button" hidden>
+                清除
+              </button>
+            </div>
+          </div>
+
+          <div class="toolbar-row">
+            <div class="filter-group" role="group" aria-label="按版本數量篩選">
+              <button class="filter-button is-active" type="button" data-filter="all" aria-pressed="true">
+                全部 <span data-filter-count="all">—</span>
+              </button>
+              <button class="filter-button" type="button" data-filter="multi" aria-pressed="false">
+                多版本 <span data-filter-count="multi">—</span>
+              </button>
+              <button class="filter-button" type="button" data-filter="single" aria-pressed="false">
+                單版本 <span data-filter-count="single">—</span>
+              </button>
+            </div>
+
+            <div class="toolbar-actions">
+              <label class="sort-control" for="sort-select">
+                <span>排序</span>
+                <select id="sort-select">
+                  <option value="source">原始次序</option>
+                  <option value="alpha">歌名 A → Z</option>
+                  <option value="versions">版本最多</option>
+                </select>
+              </label>
+              <button id="expand-all" class="text-button" type="button">全部展開</button>
+              <button id="collapse-all" class="text-button" type="button">全部收起</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="results-bar">
+          <p id="result-count" aria-live="polite">正在讀取歌曲分組…</p>
+          <p>點開卡片可見完整同組版本</p>
+        </div>
+
+        <div id="loading-state" class="card-grid loading-grid" aria-hidden="true">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+
+        <div id="card-grid" class="card-grid" aria-live="off"></div>
+
+        <div id="empty-state" class="empty-state" hidden>
+          <span aria-hidden="true">∅</span>
+          <h3>搵唔到相符分組</h3>
+          <p>試下縮短關鍵字，或者轉返「全部」。</p>
+          <button id="reset-filters" class="primary-button" type="button">清除搜尋及篩選</button>
+        </div>
+
+        <div id="error-state" class="empty-state error-state" hidden>
+          <span aria-hidden="true">!</span>
+          <h3>暫時讀取唔到 JSON</h3>
+          <p id="error-message">請重新整理再試。</p>
+          <button id="retry-load" class="primary-button" type="button">再試一次</button>
+        </div>
+      </section>
+
+      <section class="data-note shell" aria-labelledby="data-note-title">
+        <div>
+          <p class="eyebrow"><span></span> DATA NOTE</p>
+          <h2 id="data-note-title">呢一版刻意保持「raw」</h2>
+        </div>
+        <div class="data-note-copy">
+          <p>
+            畫面直接讀取 <code>data/utada-hikaru-quiz-pool.base.json</code>。
+            JSON 只需要 <code>title</code> 同 <code>includes</code>，冇硬加 ID、評分或 quiz 規則。
+          </p>
+          <p>
+            今次只展示宇多田光 main pool；「其他歌手 featuring 宇多田光」嘅 side list 暫時不在此頁。
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer shell">
+      <p>Unofficial fan discussion tool · Not affiliated with Hikaru Utada or the record labels.</p>
+      <a href="#top">返回頁首 ↑</a>
+    </footer>
+
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+    <noscript>
+      <div class="noscript-message">呢個 showroom 需要 JavaScript 先可以讀取歌曲分組 JSON。</div>
+    </noscript>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

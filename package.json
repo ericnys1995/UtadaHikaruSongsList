@@ -1,0 +1,9 @@
+{
+  "name": "utada-song-version-showroom",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node --check app.js && node scripts/validate.mjs"
+  }
+}
