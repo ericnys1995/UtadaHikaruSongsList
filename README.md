@@ -1,24 +1,37 @@
-# Hikaru Utada Song Version Showroom
+# 宇多田光｜歌曲版本分組 Review 表
 
-一個純靜態、可以直接放上 GitHub Pages 的歌曲版本分組 showroom。
+純靜態 GitHub Pages 網站，俾 fans 逐行查看歌曲版本，剔選希望由目前歌曲組拆出的 mix、remaster、live 或其他版本，再複製或匯出結果。
 
-用途係俾 fans 逐組 review：目前放埋一齊嘅版本，應該繼續同組，定係要拆開。呢一版**唔包含 quiz、排名算法、投票 backend 或 login**。
+## 今版功能
 
-## 直接放上 GitHub Pages
+- Excel／table 式排列，一行一個歌曲組或收錄版本。
+- 顯示每個版本第一次收錄時的演唱名義，例如 `宇多田ヒカル`、`Utada`、`Hikaru Utada` 及合作名義。
+- 有多個收錄名稱的歌曲組，其非組名版本設有 checkbox，可標記「建議拆出」。只有一個收錄名稱的組不會製造冇意義的拆分選項。
+- 「複製選擇」會產生方便貼入 message／討論區的文字。
+- 「匯出 JSON」會下載結構化拆分建議。
+- 可搜尋歌名、版本名稱及演唱名義，亦可只查看有可拆版本或已選項目。
 
-1. 在 GitHub 建立一個 repository。
-2. 將呢個 folder **入面所有檔案**放到 repository 根目錄；`index.html` 必須位於根目錄。
-3. 去 repository 的 **Settings → Pages**。
-4. 在 **Build and deployment** 將 Source 設為 **Deploy from a branch**。
-5. 選擇 `main` branch、`/(root)` folder，然後 Save。
+## 放上 GitHub Pages
+
+1. 將呢個 folder 入面所有檔案放到 GitHub repository 根目錄；`index.html` 必須位於根目錄。
+2. 去 repository 的 **Settings → Pages**。
+3. 在 **Build and deployment** 將 Source 設為 **Deploy from a branch**。
+4. 選擇 `main` branch、`/(root)` folder，然後 Save。
 
 官方說明：[Configuring a publishing source for your GitHub Pages site](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)
 
-呢個 project 已包含 `.nojekyll`，GitHub Pages 會直接當一般 HTML／CSS／JS 靜態網站處理。
+## 資料檔案
+
+```text
+data/utada-hikaru-quiz-pool.base.json   歌曲組及目前同組版本
+data/utada-hikaru-releases.raw.json     演唱名義及首次收錄資料
+```
+
+網站用完整收錄名稱將兩份資料配對。要拆組或合組，主要修改 `utada-hikaru-quiz-pool.base.json` 的 `title` 與 `includes`；演唱名義會由 raw release JSON 自動帶入。
 
 ## 本機預覽
 
-因為 JavaScript 要 `fetch()` JSON，唔好直接 double-click `index.html`。在呢個 folder 內開 terminal：
+因為網站需要 `fetch()` JSON，唔好直接 double-click `index.html`。在網站 folder 內執行：
 
 ```bash
 python3 -m http.server 8000
@@ -26,54 +39,12 @@ python3 -m http.server 8000
 
 然後開 <http://localhost:8000>。
 
-## 點樣改分組
+## 可選檢查
 
-所有 showroom 資料只來自：
-
-```text
-data/utada-hikaru-quiz-pool.base.json
-```
-
-每組只需要兩項：
-
-```json
-{
-  "title": "Song A",
-  "includes": [
-    "Song A",
-    "Song A -Version Name-"
-  ]
-}
-```
-
-- `title`：卡片顯示的組名。
-- `includes`：目前暫定放在同一組的完整收錄名稱。
-- 要拆組：將部分名稱移到另一個 `{ "title", "includes" }` object。
-- 要合組：將名稱放入同一個 `includes`，再刪除空出來的組。
-- 不需要手動加 ID、年份、評分或 quiz 規則。
-
-改完 JSON 後重新 push，showroom 會自動跟住新資料顯示。歌曲卡的「複製此組連結」使用組名做網址定位，所以只要組名不變，重新排序都唔會令連結失效。
-
-## 檔案結構
-
-```text
-index.html                         頁面結構及文字
-styles.css                        視覺、responsive layout
-app.js                            讀取 JSON、搜尋、篩選、排序、分享
-data/utada-hikaru-quiz-pool.base.json
-.nojekyll                         停用 GitHub Pages 的 Jekyll 處理
-```
-
-## 可選：資料及程式檢查
-
-網站本身不需要 Node.js；以下只係交付前檢查：
+網站本身不需要 Node.js。交付前可以執行：
 
 ```bash
 npm run build
 ```
 
-檢查會確認 JavaScript syntax、JSON schema、重複組名及統計數字。
-
----
-
-Unofficial fan discussion tool. Not affiliated with Hikaru Utada or the record labels.
+檢查會確認 JavaScript syntax、歌曲分組、重複名稱，以及每個收錄版本都有演唱名義。
