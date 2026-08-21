@@ -35,7 +35,7 @@ const requiredIds = [
 for (const id of requiredIds) {
   if (!html.includes(`id="${id}"`)) throw new Error(`index.html is missing #${id}`);
 }
-if (!html.includes('href="./styles.css"') || !html.includes('src="./app.js"')) {
+if (!html.includes('href="./styles.css?') || !html.includes('src="./app.js?')) {
   throw new Error("index.html is missing a relative CSS or JavaScript entrypoint");
 }
 
@@ -81,6 +81,9 @@ pool.pool.forEach((group, index) => {
 
   group.includes.forEach((title) => {
     if (typeof title !== "string" || !title.trim()) throw new Error(`Invalid title in ${group.title}`);
+    if (/(?:live\s+version|from\s+the\s+first\s+take)/i.test(title)) {
+      throw new Error(`Live performance must be excluded from the review pool: ${title}`);
+    }
     if (recordTitles.has(title)) throw new Error(`Record appears in more than one group: ${title}`);
     if (!creditMap.has(title)) throw new Error(`No artist credit found for: ${title}`);
     recordTitles.add(title);

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="宇多田光歌曲版本分組 Review 表：剔選你認為應該由目前組別拆出的 mix、remaster、live 或其他版本。"
+      content="宇多田光歌曲版本分組 Review 表：選擇你認為應該由目前組別拆出的 mix、remaster 或其他版本。"
     />
     <meta name="theme-color" content="#d9efff" />
     <meta property="og:type" content="website" />
@@ -15,8 +15,9 @@
       content="逐行查看歌曲與版本，剔選後複製或匯出你的拆分建議。"
     />
     <meta name="twitter:card" content="summary" />
+    <meta name="build-version" content="responsive-v4-20260821" />
     <title>宇多田光｜歌曲版本分組 Review 表</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./styles.css?v=responsive-v4-20260821" />
   </head>
   <body>
     <a class="skip-link" href="#review-table">跳到歌曲表格</a>
@@ -34,8 +35,8 @@
           <h1>歌曲版本<br /><em>分組 Review 表</em></h1>
           <div class="hero-copy">
             <p>
-              逐行查看目前同組嘅歌曲版本。請剔選你認為應該<strong>獨立拆出</strong>嘅
-              mix、remaster、live 或其他版本，完成後直接複製結果。
+              逐行查看目前同組嘅歌曲版本。請點選你認為應該<strong>獨立拆出</strong>嘅
+              mix、remaster 或其他版本，完成後直接複製結果。
             </p>
             <span id="as-of" class="as-of">資料讀取中…</span>
           </div>
@@ -51,7 +52,7 @@
             <dd id="record-total">—</dd>
           </div>
           <div>
-            <dt>可勾選版本</dt>
+            <dt>可拆版本</dt>
             <dd id="review-total">—</dd>
           </div>
         </dl>
@@ -65,7 +66,7 @@
             <p class="section-label">CURRENT GROUPING</p>
             <h2 id="sheet-title">目前分組清單</h2>
           </div>
-          <p>右邊有 checkbox 嘅版本都可以提出拆分；冇 checkbox 嘅係目前組名或唯一收錄。</p>
+          <p>有多個版本嘅歌曲會顯示「拆出」按鈕；唯一收錄只保留一行。</p>
         </div>
 
         <div class="controls" aria-label="搜尋及篩選歌曲表格">
@@ -164,6 +165,6 @@
     <noscript>
       <div class="noscript-message">呢個 Review 表需要 JavaScript 先可以讀取歌曲資料。</div>
     </noscript>
-    <script type="module" src="./app.js"></script>
+    <script type="module" src="./app.js?v=responsive-v4-20260821"></script>
   </body>
 </html>

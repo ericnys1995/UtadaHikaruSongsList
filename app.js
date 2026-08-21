@@ -1,6 +1,6 @@
 const DATA_URLS = {
-  pool: "./data/utada-hikaru-quiz-pool.base.json",
-  releases: "./data/utada-hikaru-releases.raw.json",
+  pool: "./data/utada-hikaru-quiz-pool.base.json?v=responsive-v4-20260821",
+  releases: "./data/utada-hikaru-releases.raw.json?v=responsive-v4-20260821",
 };
 
 const elements = {
@@ -116,21 +116,22 @@ function parseData(poolPayload, releasesPayload) {
     const baseRecord = records.find((record) => record.title === title) ?? null;
     const artists = [...new Set(records.map((record) => record.artist))];
     const groupArtist = baseRecord?.artist ?? (artists.length === 1 ? artists[0] : "多種名義");
-    const subRecords = records.filter((record) => record.title !== title);
-    const reviewRecords = records.length > 1
-      ? subRecords
+    const displayTitle = records.length === 1 ? records[0].title : title;
+    const subRecords = records.length > 1
+      ? records.filter((record) => record.title !== title)
       : [];
+    const reviewRecords = subRecords;
 
     seenGroups.add(title);
     return {
       title,
+      displayTitle,
       artist: groupArtist,
       sourceIndex,
       records,
       subRecords,
       reviewRecords,
-      hasBaseRecord: Boolean(baseRecord),
-      searchText: normalize(`${title}\n${groupArtist}`),
+      searchText: normalize(`${title}\n${displayTitle}\n${groupArtist}\n${records.map((record) => record.title).join("\n")}`),
     };
   });
 
@@ -244,67 +245,66 @@ function getVisibleGroups() {
   });
 }
 
-function makeGroupRow(group) {
-  const row = createElement("tr", "group-row");
+function makeGroupRow(group, hasVisibleRecords) {
+  const row = createElement("tr", `group-row${hasVisibleRecords ? " has-versions" : ""}`);
   const number = createElement("td", "group-number", String(group.sourceIndex + 1).padStart(3, "0"));
   const titleCell = createElement("th", "title-cell");
   titleCell.scope = "row";
   const titleLine = createElement("div", "title-line");
-  titleLine.append(createElement("span", "", group.title));
-  if (!group.hasBaseRecord) titleLine.append(createElement("span", "family-label", "歌曲組"));
+  titleLine.append(createElement("span", "", group.displayTitle));
   titleCell.append(titleLine);
 
   const artistCell = createElement("td", "artist-cell");
   artistCell.append(makeArtistChip(group.artist));
 
   const statusCell = createElement("td", "status-cell");
-  statusCell.append(createElement("strong", "", `${group.records.length} record${group.records.length === 1 ? "" : "s"}`));
+  statusCell.append(createElement("strong", "", group.records.length === 1 ? "唯一" : `${group.records.length} records`));
   if (group.reviewRecords.length) {
-    statusCell.append(createElement("span", "", `${group.reviewRecords.length} 個可勾選`));
+    statusCell.append(createElement("span", "", `${group.reviewRecords.length} 個可拆版本`));
   }
 
   const reviewCell = createElement("td", "review-cell");
-  reviewCell.append(createElement("span", "base-mark", group.hasBaseRecord ? "組名" : "—"));
+  reviewCell.append(createElement("span", "base-mark", "—"));
   row.append(number, titleCell, artistCell, statusCell, reviewCell);
   return row;
 }
 
-function makeRecordRow(group, record) {
-  const selectable = group.reviewRecords.includes(record);
-  const selected = selectable && state.selected.has(record.title);
-  const row = createElement("tr", `sub-row${selected ? " is-selected" : ""}`);
+function makeRecordRow(group, record, isLastRecord) {
+  const selected = state.selected.has(record.title);
+  const row = createElement(
+    "tr",
+    `sub-row${selected ? " is-selected" : ""}${isLastRecord ? " is-last-record" : ""}`,
+  );
   row.dataset.recordTitle = record.title;
 
   const marker = createElement("td", "sub-marker", "↳");
   const titleCell = createElement("td", "title-cell", record.title);
   const artistCell = createElement("td", "artist-cell");
   artistCell.append(makeArtistChip(record.artist));
-  const statusCell = createElement("td", "status-cell", selectable ? "版本" : "唯一收錄");
+  const statusCell = createElement("td", "status-cell", "版本");
   const reviewCell = createElement("td", "review-cell");
 
-  if (selectable) {
-    const label = createElement("label", "review-check");
-    const checkbox = createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = selected;
-    checkbox.setAttribute("aria-label", `建議將 ${record.title} 從 ${group.title} 拆出`);
-    checkbox.addEventListener("change", () => {
-      if (checkbox.checked) state.selected.add(record.title);
-      else state.selected.delete(record.title);
-      row.classList.toggle("is-selected", checkbox.checked);
-      if (state.view === "selected") {
-        if (state.selected.size === 0) state.view = "all";
-        renderTable();
-      } else {
-        updateSummary();
-        syncControls();
-      }
-    });
-    label.append(checkbox);
-    reviewCell.append(label);
-  } else {
-    reviewCell.append(createElement("span", "base-mark", "—"));
-  }
+  const label = createElement("label", "review-toggle");
+  const checkbox = createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.checked = selected;
+  checkbox.setAttribute("aria-label", `建議將 ${record.title} 從 ${group.title} 拆出`);
+  const toggleFace = createElement("span", "toggle-face");
+  toggleFace.setAttribute("aria-hidden", "true");
+  checkbox.addEventListener("change", () => {
+    if (checkbox.checked) state.selected.add(record.title);
+    else state.selected.delete(record.title);
+    row.classList.toggle("is-selected", checkbox.checked);
+    if (state.view === "selected") {
+      if (state.selected.size === 0) state.view = "all";
+      renderTable();
+    } else {
+      updateSummary();
+      syncControls();
+    }
+  });
+  label.append(checkbox, toggleFace);
+  reviewCell.append(label);
   row.append(marker, titleCell, artistCell, statusCell, reviewCell);
   return row;
 }
@@ -315,15 +315,15 @@ function renderTable() {
   let visibleReviewRecords = 0;
 
   visible.forEach(({ group, displayRecords }) => {
-    fragment.append(makeGroupRow(group));
-    displayRecords.forEach((record) => {
-      fragment.append(makeRecordRow(group, record));
+    fragment.append(makeGroupRow(group, displayRecords.length > 0));
+    displayRecords.forEach((record, index) => {
+      fragment.append(makeRecordRow(group, record, index === displayRecords.length - 1));
       if (group.reviewRecords.includes(record)) visibleReviewRecords += 1;
     });
   });
 
   elements.rows.replaceChildren(fragment);
-  elements.resultCount.textContent = `顯示 ${visible.length} 個歌曲組 · ${visibleReviewRecords} 個可勾選版本`;
+  elements.resultCount.textContent = `顯示 ${visible.length} 個歌曲組 · ${visibleReviewRecords} 個可拆版本`;
   elements.tableFrame.hidden = visible.length === 0;
   elements.empty.hidden = visible.length !== 0;
   updateSummary();

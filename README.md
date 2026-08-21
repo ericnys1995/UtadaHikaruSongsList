@@ -1,12 +1,15 @@
 # 宇多田光｜歌曲版本分組 Review 表
 
-純靜態 GitHub Pages 網站，俾 fans 逐行查看歌曲版本，剔選希望由目前歌曲組拆出的 mix、remaster、live 或其他版本，再複製或匯出結果。
+純靜態 GitHub Pages 網站，俾 fans 逐行查看歌曲版本，選擇希望由目前歌曲組拆出的 mix、remaster 或其他版本，再複製或匯出結果。
 
 ## 今版功能
 
 - Excel／table 式排列，一行一個歌曲組或收錄版本。
+- 電腦版保留工作表；手機版自動變成直排歌曲 list，毋須左右拖動。
 - 顯示每個版本第一次收錄時的演唱名義，例如 `宇多田ヒカル`、`Utada`、`Hikaru Utada` 及合作名義。
-- 有多個收錄名稱的歌曲組，其非組名版本設有 checkbox，可標記「建議拆出」。只有一個收錄名稱的組不會製造冇意義的拆分選項。
+- 有多個收錄名稱的歌曲組，其版本設有大型「拆出／已選」切換按鈕。
+- 只有一個收錄名稱的組只顯示一行，不再另外製造 sub record。
+- 名稱標明 `Live Version` 或 `From THE FIRST TAKE` 的現場 records 已從 review pool 移除。
 - 「複製選擇」會產生方便貼入 message／討論區的文字。
 - 「匯出 JSON」會下載結構化拆分建議。
 - 可搜尋歌名、版本名稱及演唱名義，亦可只查看有可拆版本或已選項目。
@@ -47,4 +50,4 @@ python3 -m http.server 8000
 npm run build
 ```
 
-檢查會確認 JavaScript syntax、歌曲分組、重複名稱，以及每個收錄版本都有演唱名義。
+檢查會確認 JavaScript syntax、歌曲分組、重複名稱、Live Version 排除規則，以及每個收錄版本都有演唱名義。
